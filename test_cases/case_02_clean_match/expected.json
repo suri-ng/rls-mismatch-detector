@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MATCH",
+  "severity": "none",
+  "explanation": "App code assumes access is restricted to the row's own user_id, and the RLS policy 'own notes only' enforces exactly that via auth.uid() = user_id. Assumption and enforcement agree."
+}

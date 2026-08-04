@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MISMATCH",
+  "severity": "critical",
+  "explanation": "App code filters by user_id and assumes that is the only gate on who can read a note, but the RLS policy 'allow all reads' allows any authenticated (or anonymous) client to read every row directly via the auto-generated Supabase API, bypassing the app's filter entirely. Data exposure."
+}

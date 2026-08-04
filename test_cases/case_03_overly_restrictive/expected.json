@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MISMATCH",
+  "severity": "medium",
+  "explanation": "App code assumes the database will return both a user's own notes and notes shared with them via note_shares, applying no filter of its own. The RLS policy 'owner only' checks only auth.uid() = user_id and never references note_shares, so shared notes are silently omitted. This is a functionality bug (broken sharing feature), not a data exposure, hence lower severity than case_01."
+}

@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MISMATCH",
+  "severity": "medium",
+  "explanation": "The app code filters on owner_id, but the table schema and policy use user_id. That field-name mismatch means the code is likely querying the wrong column, so the intended owner check never actually executes. The result is a broken read path rather than a deliberate data exposure."
+}

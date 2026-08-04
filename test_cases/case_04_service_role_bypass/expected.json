@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MISMATCH",
+  "severity": "critical",
+  "explanation": "The app code uses a service-role client to read notes directly, which bypasses the row-level security policy entirely. The schema still enforces owner-only reads via auth.uid() = user_id, so the application is not respecting the intended data boundary and can expose all notes through the backend path."
+}
