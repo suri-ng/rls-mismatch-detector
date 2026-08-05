@@ -35,6 +35,7 @@ REPORT_TOOL = {
                             },
                             "assumed_condition": {"type": "string"},
                             "source": {"type": "string"},
+                            "bypasses_enforcement": {"type": "boolean"},
                             "confidence": {"type": "number"},
                         },
                         "required": [
@@ -50,6 +51,7 @@ REPORT_TOOL = {
         },
     },
 }
+
  
  
 def run_access_model_agent(app_code: str) -> list[AccessClaim]:

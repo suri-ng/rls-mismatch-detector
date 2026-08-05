@@ -46,6 +46,16 @@ class AccessClaim(BaseModel):
         ...,
         description="Short pointer to where in the code this was inferred from, e.g. 'getNotes(): .eq(\"user_id\", req.user.id)'",
     )
+    bypasses_enforcement: bool = Field(
+        default=False,
+        description=(
+            "True if the code uses a privileged/service-role/admin credential "
+            "that causes RLS to be skipped entirely for this request, making "
+            "whatever the database enforces irrelevant to this code path. "
+            "assumed_condition should still describe any filter the code "
+            "itself applies, independent of this flag."
+        ),
+    )
     confidence: float = Field(
         default=1.0,
         ge=0.0,

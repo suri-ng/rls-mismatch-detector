@@ -112,6 +112,45 @@ def _deterministic_reconcile(
     Returns a ReconcileResult if this pair resolves cleanly and safely by
     rule, or None if it needs LLM escalation.
     """
+    if access.bypasses_enforcement:
+        # The enforcement claim is irrelevant here -- RLS never runs for a
+        # privileged credential, so whatever the database enforces has no
+        # bearing on this code path. This is fully deterministic: it never
+        # needs LLM judgment, because there's nothing to weigh -- the
+        # enforcement side simply doesn't apply, full stop.
+        assumed_cat, _ = classify(access.assumed_condition)
+        if assumed_cat in (ConditionCategory.OWN_ROW_ONLY,):
+            severity = Severity.MEDIUM
+            explanation = (
+                f"This code uses a privileged credential, so RLS is bypassed "
+                f"entirely -- the database's enforcement (whatever it is) does "
+                f"not apply. The code does still filter by {access.assumed_condition!r} "
+                f"itself, so access isn't currently wide open, but this filter is "
+                f"the ONLY protection in effect, with zero database backstop. Any "
+                f"future change to this one line removes all protection with "
+                f"nothing to catch it."
+            )
+        else:
+            severity = Severity.CRITICAL
+            explanation = (
+                f"This code uses a privileged credential, so RLS is bypassed "
+                f"entirely, and it applies no filter of its own "
+                f"({access.assumed_condition!r}). There is no restriction in "
+                f"effect at all for this request, regardless of what the "
+                f"database's policy says -- it never runs."
+            )
+        return ReconcileResult(
+            table=access.table,
+            operation=access.operation,
+            status=MismatchStatus.MISMATCH,
+            severity=severity,
+            explanation=explanation,
+            access_claim=access,
+            enforcement_claim=enforcement,
+        )
+ 
+
+    
     assumed_cat, assumed_field = classify(access.assumed_condition)
     enforced_cat, enforced_field = classify(enforcement.enforced_condition)
  
