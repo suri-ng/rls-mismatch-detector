@@ -56,8 +56,8 @@ To prevent visual clutter, components resting on the `#F8FAFC` background use a 
 ## 4. Interactive Elements & Micro-Primitives
 
 ### 4.1 Buttons & CTA Highlights
-* **Primary Button (e.g., "Run Check"):** Stark white (#FFFFFF) with a thin 1px border styled with the Glacier Gradient. On hover, the button fills with a faint ice-blue tint (#F0FDF4), and the text shifts to deep glacier blue.
-* **Secondary Actions:** Flat gray backgrounds or whisper-thin outlines (#E2E8F0) that fade softly on hover.
+* **Primary Button (e.g., "Run Check"):** A solid-fill button using the **Glacier Gradient** background with stark white (`#FFFFFF`) text for high-contrast legibility. It serves as the visual anchor of the action panel.
+* **Secondary Button (e.g., "Secondary Action"):** A flat, quiet gray background block (`#F1F5F9` or `#E2E8F0`) with dark slate text (`#0F172A`).
 
 ### 4.2 Form Inputs, Dropdowns & Focus States
 * **Default Input State:** Transparent background, no fill, and a thin gray border (#E2E8F0).
