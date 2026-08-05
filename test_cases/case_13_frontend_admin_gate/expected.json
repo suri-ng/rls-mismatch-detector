@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MISMATCH",
+  "severity": "critical",
+  "explanation": "The application assumes access to the admin moderation panel (and the underlying query for every note) is restricted to users with role 'admin', but this is enforced only by a client-side redirect and conditional render -- never verified server-side. The RLS policy intended to restrict this to admins uses auth.role() = 'authenticated', a Supabase built-in that returns true for ANY logged-in user, not a custom admin flag. Combined via OR with the 'own notes only' policy, the net effect is that every authenticated user -- not just admins -- can read every user's notes by calling the Supabase client directly, bypassing the frontend's role check entirely, which was never real protection to begin with."
+}

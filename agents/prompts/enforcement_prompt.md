@@ -34,6 +34,17 @@ from what the SQL appears to say at a glance:
   (select ... from some_other_table ...)`) -- report it as-is, composite
   conditions are legitimate and shouldn't be flattened into a simplified
   approximation.
+- `auth.role()` is a Supabase BUILT-IN function that returns only 'anon' or
+  'authenticated' -- it distinguishes logged-out from logged-in sessions,
+  nothing more. It is NOT a custom permission/role system, and a condition
+  like `auth.role() = 'authenticated'` grants access to EVERY logged-in
+  user, not to any specific application-level role like "admin" or
+  "editor". A policy using this as its only condition is effectively
+  unrestricted for any authenticated user, however admin-sounding the
+  policy's name or comments are -- report enforced_condition as "true
+  (unrestricted for any authenticated user)" in that case, not as if it
+  actually checked a custom role.
+
 
 For each (table, operation) you report:
 - enforced_condition: the actual effective rule, in the policy's own

@@ -53,6 +53,19 @@ conditions that don't affect what request is actually sent (e.g. hiding a
 button) -- only code that actually constructs or sends the database query
 counts.
 
+However, if frontend code GATES an entire feature or route based on a
+role/permission check (e.g. a route guard that redirects non-admins away,
+or a component that only fetches/renders data when `user.role === 'admin'`),
+this DOES represent a real access assumption, even though it's enforced
+only in the browser. Report it as an assumed_condition the same way a
+backend filter would be reported (e.g. "role == 'admin'"), and note in
+`source` that this is a frontend-only gate with no server-side
+verification -- the developer may be trusting this UI check as if it were
+real protection, which it is not: any client can bypass a frontend
+redirect or call the underlying query directly. Whether that trust is
+misplaced is for a later step to judge, not you -- just report what's
+being assumed and where it lives.
+
 Set confidence below 1.0 only if the logic is ambiguous, spread across
 untraceable helper functions, or conditionally applied.
 
