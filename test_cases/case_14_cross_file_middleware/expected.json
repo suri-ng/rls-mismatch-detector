@@ -1,0 +1,24 @@
+[
+  {
+    "table": "notes",
+    "operation": "UPDATE",
+    "status": "MATCH",
+    "severity": "none",
+    "explanation": "routes_notes.js's updateNote() applies no filter or role check of its own -- read in isolation, this would look like it assumes NO restriction, which combined with the enforced 'owner or editor role' policy would look like a completeness gap worth questioning. But middleware_requireEditor.js runs first and independently verifies the requester is the owner or an editor-role collaborator before updateNote() ever executes. Combining both files gives the correct assumed_condition: owner OR editor-role collaborator -- which matches the enforced policy exactly. This is the point of this test case: reading routes_notes.js alone would produce a false positive; only combining both files gives the right answer.",
+    "_note": "If the pipeline is only given routes_notes.js without middleware_requireEditor.js, expect a false completeness-question finding here instead of MATCH -- that failure mode is what this case is designed to catch."
+  },
+  {
+    "table": "notes",
+    "operation": "SELECT",
+    "status": "MATCH",
+    "severity": "none",
+    "explanation": "The middleware's own internal lookup (checking note.user_id to verify ownership) is itself a SELECT on notes, made with the requester's own session. The 'select: owner or any shared role' policy correctly allows this lookup to succeed for the requester's own accessible notes."
+  },
+  {
+    "table": "note_shares",
+    "operation": "SELECT",
+    "status": "MATCH",
+    "severity": "none",
+    "explanation": "The middleware's own lookup of the requester's share role is itself a SELECT on note_shares. The 'note_shares visible to owner or the shared user' policy correctly allows the requester to read their own share row."
+  }
+]
