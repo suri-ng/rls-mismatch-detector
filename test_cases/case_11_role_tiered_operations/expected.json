@@ -1,0 +1,23 @@
+[
+  {
+    "table": "notes",
+    "operation": "SELECT",
+    "status": "MATCH",
+    "severity": "none",
+    "explanation": "The application relies entirely on RLS to allow any shared role (viewer or editor) plus the owner to read a note. The 'select: owner or any shared role' policy enforces exactly that -- no role restriction was intended here, and none exists. Assumption and enforcement agree."
+  },
+  {
+    "table": "notes",
+    "operation": "UPDATE",
+    "status": "MISMATCH",
+    "severity": "high",
+    "explanation": "The application assumes only the owner or an editor-role collaborator can update a note -- a viewer-role collaborator should not be able to. The 'update: owner or shared' policy was copy-pasted from the SELECT policy and never had a role='editor' condition added, so a viewer-role collaborator can currently update notes they were only ever granted read access to."
+  },
+  {
+    "table": "notes",
+    "operation": "DELETE",
+    "status": "MISMATCH",
+    "severity": "high",
+    "explanation": "The application assumes ONLY the owner can delete a note -- not even an editor-role collaborator should be able to. The 'delete: owner or shared' policy copy-pastes the same broad owner-or-shared logic used for SELECT, so both viewer- and editor-role collaborators can currently delete notes that were only ever shared with them, not just view or edit them."
+  }
+]

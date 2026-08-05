@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MISMATCH",
+  "severity": "medium",
+  "explanation": "The application assumes soft-deleted notes (deleted_at set) are never visible, on top of the ownership restriction. The RLS policy only enforces ownership -- it has no condition on deleted_at at all. This does not expose data to OTHER users (ownership is still correctly enforced), but it does mean the owner themselves can retrieve 'deleted' notes via a direct API call bypassing this route, breaking the application's data-lifecycle assumption rather than causing cross-user exposure -- comparable in kind to case_03's functionality-break direction, but driven by a lifecycle flag rather than a sharing relationship."
+}

@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MISMATCH",
+  "severity": "high",
+  "explanation": "The application assumes a two-part restriction: same org_id AND same user_id, treating notes as private to the individual within their org. The RLS policy only enforces the org_id condition -- it has no check on user_id at all. This means any teammate in the same organization can read every other teammate's notes, a much broader exposure than the application intends, though not a fully public leak across all organizations."
+}

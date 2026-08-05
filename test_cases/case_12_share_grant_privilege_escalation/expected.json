@@ -1,0 +1,7 @@
+{
+  "table": "note_shares",
+  "operation": "INSERT",
+  "status": "MISMATCH",
+  "severity": "critical",
+  "explanation": "The application checks that the requester owns the referenced note before inserting a share row, and assumes this check -- that the inserter owns notes.user_id for the given note_id -- is also enforced at the database level if this route is bypassed. The actual WITH CHECK clause is unconditional ('with check (true)'), validating nothing about the relationship between the inserter and the note being shared. Any authenticated user can insert a note_shares row for ANY note_id, granting themselves (or anyone) viewer or editor access to notes they don't own -- a privilege-escalation bug distinct from case_09's, since the value being validated here depends on a DIFFERENT table (notes.user_id) rather than a field on the row being inserted itself."
+}

@@ -2,6 +2,6 @@
   "table": "notes",
   "operation": "SELECT",
   "status": "MISMATCH",
-  "severity": "medium",
-  "explanation": "The app code filters on owner_id, but the table schema and policy use user_id. That field-name mismatch means the code is likely querying the wrong column, so the intended owner check never actually executes. The result is a broken read path rather than a deliberate data exposure."
+  "severity": "high",
+  "explanation": "The application assumes access follows owner_id (the current owner, post-transfer), but the RLS policy still checks created_by (the original, permanent author) -- a leftover from before the ownership-transfer feature existed. These are NOT equivalent columns: after a note is transferred, the original creator retains database-level read access they should no longer have, while the new owner (per the application's own logic) has no corresponding guarantee at the database level. This is a genuine access-control bug introduced by a feature change, not a cosmetic naming difference."
 }

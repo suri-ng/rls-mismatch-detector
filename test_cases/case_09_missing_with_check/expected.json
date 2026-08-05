@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "INSERT",
+  "status": "MISMATCH",
+  "severity": "critical",
+  "explanation": "The application always sets user_id to the authenticated user's own id, and assumes this -- together with RLS -- means notes can never be inserted under someone else's identity. The INSERT policy's WITH CHECK clause is unconditional ('with check (true)'), so it validates nothing about the inserted user_id: any authenticated client bypassing this route (e.g. calling the Supabase REST API directly) can insert notes attributed to any user, impersonating them. This is specifically a write-validation gap (WITH CHECK), distinct from a read-restriction gap (USING) -- reads may be properly restricted elsewhere while this remains wide open."
+}

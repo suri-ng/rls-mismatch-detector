@@ -1,0 +1,7 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MATCH",
+  "severity": "none",
+  "explanation": "The application applies no filter, relying entirely on RLS to return the owner's notes plus notes shared with them via note_shares. Unlike case_03, the policy here actually implements both halves of that condition: ownership OR an existing row in note_shares for the current user. Assumption and enforcement agree, even though both sides are composite rather than a single simple equality -- this is the corrected version of case_03's bug, included specifically so composite conditions don't get treated as automatically suspicious."
+}

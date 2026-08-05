@@ -3,5 +3,5 @@
   "operation": "SELECT",
   "status": "MISMATCH",
   "severity": "critical",
-  "explanation": "The app code uses a service-role client to read notes directly, which bypasses the row-level security policy entirely. The schema still enforces owner-only reads via auth.uid() = user_id, so the application is not respecting the intended data boundary and can expose all notes through the backend path."
+  "explanation": "The application constructs its Supabase client using the service_role key, which bypasses Row Level Security entirely -- the 'own notes only' policy in schema.sql, though correctly written, never applies to this code path. The application also applies no filter of its own, so there is no restriction in effect at all for this request. This resolves deterministically once the Access-Model Agent flags the privileged credential (bypasses_enforcement=true): the Reconciler never needs to weigh the two conditions against each other, since the enforcement side simply does not apply."
 }

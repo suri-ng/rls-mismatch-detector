@@ -2,6 +2,6 @@
   "table": "notes",
   "operation": "SELECT",
   "status": "MISMATCH",
-  "severity": "high",
+  "severity": "critical",
   "explanation": "The app code restricts reads to the caller's own user_id, but the schema defines multiple select policies, including one that allows any authenticated client to read all rows via using (true). The presence of an overlapping permissive policy makes the effective enforcement broader than what the application expects, creating a privilege escalation path."
 }
