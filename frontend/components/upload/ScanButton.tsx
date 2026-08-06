@@ -13,7 +13,7 @@ export function ScanButton({ disabled, loading, onClick }: ScanButtonProps) {
       disabled={disabled || loading}
       onClick={onClick}
       className={[
-        "rounded-control px-6 py-3 text-sm font-medium transition-opacity",
+        "rounded-control px-8 py-3.5 text-base font-medium transition-opacity",
         disabled || loading
           ? "bg-divider text-muted cursor-not-allowed"
           : "bg-glacier-gradient text-white hover:opacity-90",

@@ -23,38 +23,40 @@ export default function Workspace() {
   }, []);
 
   return (
-    <main className="mx-auto min-h-screen max-w-3xl px-6 py-16">
-      <div className="mb-12 flex items-center justify-between">
-        <h1 className="font-display text-2xl tracking-tight text-ink">Results</h1>
+    <main className="mx-auto max-w-[1400px] px-12 py-20">
+      <div className="mb-14 flex items-center justify-between">
+        <h1 className="font-display text-4xl tracking-tight text-ink">Results</h1>
         <Link
           href="/"
-          className="rounded-control bg-glacier-gradient px-4 py-2 text-sm font-medium text-white transition-opacity hover:opacity-90"
+          className="rounded-control bg-glacier-gradient px-6 py-3 text-base font-medium text-white transition-opacity hover:opacity-90"
         >
           New scan
         </Link>
       </div>
 
-      {error && <ErrorBanner message={error} />}
+      <div className="max-w-3xl">
+        {error && <ErrorBanner message={error} />}
 
-      {!error && results && results.length > 0 && <FindingsList results={results} />}
+        {!error && results && results.length > 0 && <FindingsList results={results} />}
 
-      {!error && results && results.length === 0 && (
-        <EmptyState
-          title="No mismatches found"
-          message="Every table and operation checked out clean."
-          actionLabel="Run another scan"
-          actionHref="/"
-        />
-      )}
+        {!error && results && results.length === 0 && (
+          <EmptyState
+            title="No mismatches found"
+            message="Every table and operation checked out clean."
+            actionLabel="Run another scan"
+            actionHref="/"
+          />
+        )}
 
-      {!error && !results && (
-        <EmptyState
-          title="No scan yet"
-          message="Upload a schema and app code to see results here."
-          actionLabel="Start a scan"
-          actionHref="/"
-        />
-      )}
+        {!error && !results && (
+          <EmptyState
+            title="No scan yet"
+            message="Upload a schema and app code to see results here."
+            actionLabel="Start a scan"
+            actionHref="/"
+          />
+        )}
+      </div>
     </main>
   );
 }

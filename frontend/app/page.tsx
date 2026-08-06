@@ -43,13 +43,14 @@ export default function Home() {
   };
 
   return (
-    <main className="mx-auto flex min-h-screen max-w-3xl flex-col items-center justify-center gap-16 px-6 py-24">
-      <div className="text-center">
-        <h1 className="font-display text-4xl tracking-tight text-ink">
-          RLS Mismatch Detector
+    <main className="mx-auto max-w-[1400px] px-12 py-20">
+      <div className="mb-16 max-w-2xl">
+        <h1 className="font-display text-6xl leading-tight tracking-tight text-ink">
+          Find where your app and your database disagree
         </h1>
-        <p className="mt-3 text-sm text-muted">
-          Drop your schema and app code. We'll find where they disagree.
+        <p className="mt-5 text-lg leading-relaxed text-muted">
+          Drop your schema and app code. We&apos;ll flag every table and
+          operation where the two don&apos;t actually match.
         </p>
       </div>
 
@@ -57,7 +58,7 @@ export default function Home() {
         <ScanningOverlay />
       ) : (
         <>
-          <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2">
+          <div className="grid grid-cols-1 gap-8 lg:grid-cols-2">
             <UploadPanel
               title="Schema"
               hint=".sql files"
@@ -68,14 +69,16 @@ export default function Home() {
             />
             <UploadPanel
               title="App code"
-              hint="Any backend or frontend files"
+              hint="Any source files"
               kind="appCode"
               files={appCodeFiles}
               onFilesChange={setAppCodeFiles}
             />
           </div>
 
-          <ScanButton disabled={!canScan} loading={isScanning} onClick={handleScan} />
+          <div className="mt-8 flex justify-end">
+            <ScanButton disabled={!canScan} loading={isScanning} onClick={handleScan} />
+          </div>
         </>
       )}
     </main>
