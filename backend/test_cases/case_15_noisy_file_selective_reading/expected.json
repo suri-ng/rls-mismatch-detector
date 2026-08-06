@@ -1,0 +1,8 @@
+{
+  "table": "notes",
+  "operation": "SELECT",
+  "status": "MATCH",
+  "severity": "none",
+  "explanation": "The application filters notes by user_id, matching the 'own notes only' policy exactly. This is the ONLY finding expected from this file.",
+  "_note": "The real point of this case isn't the MATCH itself -- it's whether the Access-Model Agent correctly produces EXACTLY ONE claim (notes.SELECT) and does not fabricate additional claims from trackPageView('/dashboard'), the fetch() call to api.weatherprovider.example, or logEvent('theme_toggled') -- none of which touch a database at all, despite superficially resembling one (an identifier plus a payload, or a .then()-chained call). If the pipeline produces any claim for a table other than 'notes', or any claim sourced from the analytics/weather code, that is the failure mode this case is designed to catch."
+}
