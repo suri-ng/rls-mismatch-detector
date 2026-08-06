@@ -1,9 +1,34 @@
 @import url("https://api.fontshare.com/v2/css?f[]=satoshi@400,500,700&display=swap");
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500&family=JetBrains+Mono:wght@400&display=swap");
+@import "tailwindcss";
 
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@theme {
+  /* Colors — generates bg-*, text-*, border-*, ring-* utilities automatically */
+  --color-canvas: #F8FAFC;
+  --color-surface: #FFFFFF;
+  --color-ink: #0F172A;
+  --color-muted: #64748B;
+  --color-divider: #F1F5F9;
+  --color-border: #E2E8F0;
+  --color-glacier-blue: #0284C7;
+  --color-frosty-teal: #0D9488;
+  --color-code-line: #334155;
+
+  /* Fonts — generates font-display / font-sans / font-mono */
+  --font-display: "Fraunces", serif;
+  --font-sans: "Satoshi", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", monospace;
+
+  /* Radius — generates rounded-card / rounded-control */
+  --radius-card: 12px;
+  --radius-control: 8px;
+
+  /* Shadow — generates shadow-card */
+  --shadow-card: 0 1px 2px rgba(15, 23, 42, 0.04), 0 4px 16px rgba(15, 23, 42, 0.04);
+
+  /* Background image — generates bg-glacier-gradient */
+  --background-image-glacier-gradient: linear-gradient(90deg, #0284C7 0%, #0D9488 100%);
+}
 
 html,
 body {

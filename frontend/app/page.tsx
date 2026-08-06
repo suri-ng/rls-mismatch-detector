@@ -4,19 +4,42 @@ import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadPanel } from "@/components/upload/UploadPanel";
 import { ScanButton } from "@/components/upload/ScanButton";
+import { ScanningOverlay } from "@/components/feedback/ScanningOverlay";
 
 export default function Home() {
   const router = useRouter();
   const [schemaFiles, setSchemaFiles] = useState<File[]>([]);
   const [appCodeFiles, setAppCodeFiles] = useState<File[]>([]);
 
-  const canScan = schemaFiles.length > 0 && appCodeFiles.length > 0;
+  const [isScanning, setIsScanning] = useState(false);
+  const canScan = schemaFiles.length > 0 && appCodeFiles.length > 0 && !isScanning;
 
-  const handleScan = () => {
-    // Files themselves can't survive a route change in memory alone;
-    // the actual submit + navigation wiring (POST to /api/scan, storing
-    // results, then router.push) comes next once ScanningOverlay exists.
-    router.push("/workspace");
+  const handleScan = async () => {
+    setIsScanning(true);
+
+    const formData = new FormData();
+    schemaFiles.forEach((f) => formData.append("schema_files", f));
+    appCodeFiles.forEach((f) => formData.append("app_code_files", f));
+
+    try {
+      const res = await fetch("/api/scan", { method: "POST", body: formData });
+      const data = await res.json();
+
+      if (!res.ok) {
+        sessionStorage.removeItem("scan:results");
+        sessionStorage.setItem("scan:error", data.error ?? "Something went wrong.");
+        router.push("/workspace");
+        return;
+      }
+
+      sessionStorage.removeItem("scan:error");
+      sessionStorage.setItem("scan:results", JSON.stringify(data.results));
+      router.push("/workspace");
+    } catch {
+      sessionStorage.removeItem("scan:results");
+      sessionStorage.setItem("scan:error", "Couldn't reach the scan service. Try again.");
+      router.push("/workspace");
+    }
   };
 
   return (
@@ -30,23 +53,31 @@ export default function Home() {
         </p>
       </div>
 
-      <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2">
-        <UploadPanel
-          title="Schema"
-          hint=".sql files"
-          accept=".sql"
-          files={schemaFiles}
-          onFilesChange={setSchemaFiles}
-        />
-        <UploadPanel
-          title="App code"
-          hint="Any backend or frontend files"
-          files={appCodeFiles}
-          onFilesChange={setAppCodeFiles}
-        />
-      </div>
+      {isScanning ? (
+        <ScanningOverlay />
+      ) : (
+        <>
+          <div className="grid w-full grid-cols-1 gap-8 sm:grid-cols-2">
+            <UploadPanel
+              title="Schema"
+              hint=".sql files"
+              accept=".sql"
+              kind="schema"
+              files={schemaFiles}
+              onFilesChange={setSchemaFiles}
+            />
+            <UploadPanel
+              title="App code"
+              hint="Any backend or frontend files"
+              kind="appCode"
+              files={appCodeFiles}
+              onFilesChange={setAppCodeFiles}
+            />
+          </div>
 
-      <ScanButton disabled={!canScan} onClick={handleScan} />
+          <ScanButton disabled={!canScan} loading={isScanning} onClick={handleScan} />
+        </>
+      )}
     </main>
   );
 }
