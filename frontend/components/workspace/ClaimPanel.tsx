@@ -1,7 +1,11 @@
+import { LucideIcon } from "lucide-react";
 import { ConfidenceIndicator } from "./ConfidenceIndicator";
 
 interface ClaimPanelProps {
   title: string;
+  accentColor: string;
+  icon: LucideIcon;
+  rounded: "left" | "right";
   condition?: string;
   source?: string;
   confidence?: number;
@@ -10,22 +14,40 @@ interface ClaimPanelProps {
 
 export function ClaimPanel({
   title,
+  accentColor,
+  icon: Icon,
+  rounded,
   condition,
   source,
   confidence,
   emptyLabel,
 }: ClaimPanelProps) {
   return (
-    <div className="flex flex-col gap-1.5">
-      <h3 className="text-xs font-medium uppercase tracking-wide text-muted">
+    <div
+      className="h-full bg-canvas p-4"
+      style={{
+        borderTop: `2px solid ${accentColor}`,
+        borderTopLeftRadius: rounded === "left" ? "10px" : 0,
+        borderBottomLeftRadius: rounded === "left" ? "10px" : 0,
+        borderTopRightRadius: rounded === "right" ? "10px" : 0,
+        borderBottomRightRadius: rounded === "right" ? "10px" : 0,
+      }}
+    >
+      <h3
+        className="mb-2.5 text-xs font-semibold uppercase tracking-wide"
+        style={{ color: accentColor }}
+      >
         {title}
       </h3>
 
       {condition ? (
         <>
-          <p className="text-sm text-ink">{condition}</p>
+          <p className="mb-2.5 text-sm font-medium text-ink">{condition}</p>
           {source && (
-            <p className="font-mono text-xs text-code-line">{source}</p>
+            <span className="inline-flex items-center gap-1.5 rounded-control bg-surface px-2.5 py-1.5 text-xs">
+              <Icon strokeWidth={1.5} size={13} className="text-muted" />
+              <span className="font-mono text-code-line">{source}</span>
+            </span>
           )}
           {confidence !== undefined && <ConfidenceIndicator confidence={confidence} />}
         </>
