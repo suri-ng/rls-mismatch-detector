@@ -1,24 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
-import { mockResults } from "@/lib/mock-results";
+
+const BACKEND_URL = process.env.BACKEND_URL ?? "http://localhost:8000";
 
 export async function POST(req: NextRequest) {
   const formData = await req.formData();
-  const schemaFiles = formData.getAll("schema_files");
-  const appCodeFiles = formData.getAll("app_code_files");
 
-  if (schemaFiles.length === 0 || appCodeFiles.length === 0) {
+  let backendRes: Response;
+  try {
+    backendRes = await fetch(`${BACKEND_URL}/api/scan`, {
+      method: "POST",
+      body: formData,
+    });
+  } catch {
     return NextResponse.json(
-      { error: "Both schema files and app code files are required." },
-      { status: 400 }
+      { error: "Couldn't reach the scan service. Is the backend running?" },
+      { status: 500 }
     );
   }
 
-  // Simulate the real pipeline's multi-second LLM latency (handoff §4)
-  // so the loading state gets exercised honestly during development.
-  await new Promise((resolve) => setTimeout(resolve, 2000));
-
-  // TODO: once the FastAPI wrapper around run_pipeline exists, replace
-  // everything above this line with a proxied fetch to it, keeping this
-  // route's request/response shape identical so no component changes.
-  return NextResponse.json({ results: mockResults });
+  const data = await backendRes.json();
+  return NextResponse.json(data, { status: backendRes.status });
 }
